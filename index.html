@@ -45,6 +45,19 @@
       filter:drop-shadow(0 20px 30px rgba(0,0,0,.35));
       user-select:none;-webkit-user-drag:none;
     }
+    .photo-wrap{
+      display:flex;
+      justify-content:center;
+      margin: 14px 0 6px;
+    }
+    
+    .photo{
+      width: min(560px, 100%);   /* responsive: never exceed 560px */
+      height: auto;             /* keeps aspect ratio */
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+    }
     .options{display:flex;gap:12px;justify-content:center;padding:14px 0 4px;flex-wrap:wrap;}
     .choice{
       appearance:none; border:1px solid var(--line);
@@ -225,11 +238,16 @@
             <!-- PAGE 3 -->
             <div class="slide">
               <h1>Wish you a very Happiee 27th Birthday, Sweety 🎂</h1>
+            
+              <div class="photo-wrap">
+                <img class="photo" src="swee_27.png" alt="Sweety 27th birthday photo" />
+              </div>
+            
               <p class="lead">
                 May God bless you with sound knowledge and good health for the rest of your life.
               </p>
               <p class="tiny">
-                And may your smile stay exactly like this… forever 💛
+                And may your smile stay exactly like this and light up this entire world… forever 💛
               </p>
             </div>
 
