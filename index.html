@@ -164,19 +164,34 @@
     }
 
     .nav{
-      display:grid;
-      grid-template-columns: auto 1fr auto;
-      align-items:center;              /* KEY: vertical alignment */
-      gap: 16px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
       margin-top: 14px;
       user-select:none;
-      min-height: 56px;                /* KEY: consistent height */
     }
-
-    .nav-left, .nav-right{
+    
+    .nav-row{
+      display:grid;
+      grid-template-columns: auto 1fr auto;
+      align-items:center;
+      gap: 14px;
+    }
+    
+    .next-text{
+      color:#ffffffb8;
+      font-size:14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;  /* prevents overflow on small screens */
+      text-align: center;
+    }
+    
+    .dots{
       display:flex;
       align-items:center;
-      gap: 10px;
+      justify-content:center;
+      gap:12px;
     }
 
     .arrow{
@@ -207,12 +222,6 @@
       transform:none;
     }
 
-    .dots{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:12px;
-    }
     .dot{
       width:9px;height:9px;border-radius:999px;
       background:#ffffff3a;
@@ -378,17 +387,17 @@
 
         <!-- Bottom navigation (arrows + dots + “go next” text) -->
         <div class="nav" aria-label="Slider navigation">
-          <div class="nav-left">
+          <div class="nav-row">
             <button id="prevBtn" class="arrow" aria-label="Previous page">←</button>
-          </div>
-
-          <div id="dots" class="dots" aria-label="Page indicators"></div>
-
-          <div class="nav-right">
+        
             <span id="nextText" class="next-text">Go to next page swee 🤘</span>
+        
             <button id="nextBtn" class="arrow" aria-label="Next page">→</button>
           </div>
+        
+          <div id="dots" class="dots" aria-label="Page indicators"></div>
         </div>
+
 
       </section>
 
