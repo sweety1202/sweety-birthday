@@ -163,13 +163,14 @@
       to{ opacity: 1; transform: translateY(0); }
     }
 
-    .nav{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 10px;
+    ..nav{
+      display:grid;
+      grid-template-columns: auto 1fr auto;
+      align-items:center;              /* KEY: vertical alignment */
+      gap: 16px;
       margin-top: 14px;
       user-select:none;
+      min-height: 56px;                /* KEY: consistent height */
     }
 
     .nav-left, .nav-right{
@@ -179,20 +180,26 @@
     }
 
     .arrow{
-      width:44px;height:44px;border-radius:999px;
+      width:42px;
+      height:42px;
+      border-radius:999px;
       border:1px solid var(--line);
       background:linear-gradient(180deg,#ffffff18,#ffffff08);
       color:var(--text);
       cursor:pointer;
       display:grid;
       place-items:center;
-      transition: transform .12s ease, border-color .12s ease;
+      font-size: 20px;                 /* keeps arrow centered */
+      line-height: 1;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
     }
-
+    
     .arrow:hover{
       transform:translateY(-1px);
       border-color:#ffffff2c;
+      background:linear-gradient(180deg,#ffffff22,#ffffff10);
     }
+
 
     .arrow:disabled{
       opacity:.35;
@@ -201,9 +208,10 @@
     }
 
     .dots{
-      display:flex; align-items:center; justify-content:center;
-      gap:8px;
-      flex: 1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:12px;
     }
     .dot{
       width:9px;height:9px;border-radius:999px;
@@ -219,9 +227,10 @@
     }
 
     .next-text{
-      color: #ffffffb8;
-      font-size: 14px;
-      white-space: nowrap;
+      color:#ffffffb8;
+      font-size:14px;
+      white-space:nowrap;
+      margin-left: 8px;   /* gives breathing room after dots */
     }
 
     .tiny{
@@ -241,6 +250,13 @@
       opacity: 0;
       transition: opacity 160ms ease;
     }
+    @media (max-width: 480px){
+      .arrow{
+        width:46px;
+        height:46px;
+      }
+    }
+
   </style>
 </head>
 <body>
