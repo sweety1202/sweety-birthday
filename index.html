@@ -450,7 +450,7 @@
             vr: rand(-0.18, 0.18),
             w, h,
             color: colors[(Math.random() * colors.length) | 0],
-            life: rand(85, 140),
+            life: rand(120, 160),
             age: 0,
             drag: rand(0.985, 0.995)
           };
@@ -604,12 +604,18 @@
         // 🎉 Fire stage-cannon confetti ONLY on Page 3 (idx = 2)
         if (idx === 2 && !window.__cannonFired) {
           window.__cannonFired = true;
+        
+          // boom #1
           confetti.burstCannons();
+        
+          // boom #2 (after a short delay)
+          setTimeout(() => confetti.burstCannons(), 500);
         }
+        
         if (idx !== 2) {
           window.__cannonFired = false;
         }
-      }
+
 
       // Answer buttons
       choices.forEach((btn) => {
