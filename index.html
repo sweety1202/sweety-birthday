@@ -50,14 +50,17 @@
       justify-content:center;
       margin: 14px 0 6px;
     }
-    
+
     .photo{
-      width: min(560px, 100%);   /* responsive: never exceed 560px */
-      height: auto;             /* keeps aspect ratio */
+      width: min(560px, 100%);
+      height: auto;
       border-radius: 16px;
       border: 1px solid var(--line);
-      box-shadow: 0 16px 40px rgba(0,0,0,.35);
+      box-shadow:
+        0 16px 40px rgba(0,0,0,.35),
+        0 0 0 1px rgba(255,204,102,.35);
     }
+
     .options{display:flex;gap:12px;justify-content:center;padding:14px 0 4px;flex-wrap:wrap;}
     .choice{
       appearance:none; border:1px solid var(--line);
@@ -103,14 +106,13 @@
     /* --- “Pages” / slider --- */
     .view{display:none;}
     .view.active{display:block;}
-    
+
     .card.big{
       padding: 26px;
       display:flex;
       flex-direction:column;
     }
-    
-    /* Slider takes available height so content doesn't look stuck at top */
+
     .slider{
       position:relative;
       overflow:hidden;
@@ -118,29 +120,27 @@
       min-height: 62vh;
       flex: 1;
     }
-    
+
     .track{
       display:flex;
       transition: transform 380ms ease;
       will-change: transform;
       position:relative;
     }
-    
+
     .slide{
       min-width:100%;
       padding: 18px 6px;
-    
-      /* center content */
+
       display:flex;
       flex-direction:column;
       justify-content:center;
       gap: 10px;
-    
-      /* for background layer */
+
       position:relative;
+      animation: fadeIn 420ms ease both;
     }
-    
-    /* subtle decorative background */
+
     .slide::before{
       content:"";
       position:absolute;
@@ -152,14 +152,17 @@
       opacity:.9;
       z-index: 0;
     }
-    
-    /* keep slide content above the ::before layer */
+
     .slide > *{
       position:relative;
       z-index: 1;
     }
-    
-    /* Bottom navigation */
+
+    @keyframes fadeIn{
+      from{ opacity: 0; transform: translateY(6px); }
+      to{ opacity: 1; transform: translateY(0); }
+    }
+
     .nav{
       display:flex;
       align-items:center;
@@ -168,13 +171,13 @@
       margin-top: 14px;
       user-select:none;
     }
-    
+
     .nav-left, .nav-right{
       display:flex;
       align-items:center;
       gap: 10px;
     }
-    
+
     .arrow{
       width:44px;height:44px;border-radius:999px;
       border:1px solid var(--line);
@@ -185,12 +188,12 @@
       place-items:center;
       transition: transform .12s ease, border-color .12s ease;
     }
-    
+
     .arrow:hover{
       transform:translateY(-1px);
       border-color:#ffffff2c;
     }
-    
+
     .arrow:disabled{
       opacity:.35;
       cursor:not-allowed;
@@ -225,6 +228,18 @@
       font-size: 15px;
       color: var(--muted);
       line-height: 1.6;
+    }
+
+    /* --- Full-screen confetti canvas (stage cannons) --- */
+    #confettiCanvas{
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 160ms ease;
     }
   </style>
 </head>
@@ -302,7 +317,7 @@
             <div class="slide">
               <h1>Wish you a very Happiee 27th Birthday, Sweety 🎂</h1>
               <p class="tiny">✨💛✨</p>
-            
+
               <div class="photo-wrap">
                 <img class="photo" src="swee_27.png" alt="Sweety 27th birthday photo" />
               </div>
@@ -310,7 +325,7 @@
               <p class="caption">
                 Me and our darling Prabhas celebrating your birthday sweety 😄🤍🎂
               </p>
-            
+
               <p class="lead">
                 May God bless you with sound knowledge and good health for the rest of your life.
               </p>
@@ -330,6 +345,10 @@
                   and the next <b>73%</b> is going to be a beautiful adventure
                   with even more happiness and joy… because <b>Sudhamsh is here now</b>, Sweety 😉💞
                 </p>
+                <p class="tiny" style="margin-top:8px;">
+                  Thank you for existing, coming into my life and being you Sweety 🤍
+                </p>
+
               </div>
 
               <p class="tiny" style="margin-top:14px;">
@@ -364,6 +383,9 @@
 
   </main>
 
+  <!-- Full-screen confetti overlay -->
+  <canvas id="confettiCanvas" aria-hidden="true"></canvas>
+
   <script>
     (function () {
       const viewQuestion = document.getElementById("view-question");
@@ -382,6 +404,157 @@
       const slides = Array.from(track.querySelectorAll(".slide"));
       const total = slides.length;
       let idx = 0;
+
+      // ---------- Stage-cannon confetti (NO emojis) ----------
+      const confetti = (() => {
+        const canvas = document.getElementById("confettiCanvas");
+        const ctx = canvas.getContext("2d");
+
+        let W = 0, H = 0, dpr = 1;
+        let particles = [];
+        let raf = null;
+        let running = false;
+
+        function resize() {
+          dpr = Math.max(1, window.devicePixelRatio || 1);
+          canvas.width = Math.floor(window.innerWidth * dpr);
+          canvas.height = Math.floor(window.innerHeight * dpr);
+          canvas.style.width = window.innerWidth + "px";
+          canvas.style.height = window.innerHeight + "px";
+
+          // draw in CSS pixels
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          W = window.innerWidth;
+          H = window.innerHeight;
+        }
+
+        function rand(min, max){ return Math.random() * (max - min) + min; }
+
+        // confetti palette (poppers vibe)
+        const colors = [
+          "#ffcc66", "#ff6fb1", "#b9ffe6", "#ffffff", "#c9cdef",
+          "#ffd1e8", "#ffe7a3"
+        ];
+
+        function makeParticle(x, y, angleRad, speed) {
+          const isStreamer = Math.random() < 0.22; // some long streamers
+          const w = isStreamer ? rand(2, 4) : rand(4, 8);
+          const h = isStreamer ? rand(18, 34) : rand(6, 12);
+
+          return {
+            x, y,
+            vx: Math.cos(angleRad) * speed + rand(-0.6, 0.6),
+            vy: Math.sin(angleRad) * speed + rand(-0.6, 0.6),
+            g: rand(0.12, 0.18),
+            rot: rand(0, Math.PI * 2),
+            vr: rand(-0.18, 0.18),
+            w, h,
+            color: colors[(Math.random() * colors.length) | 0],
+            life: rand(85, 140),
+            age: 0,
+            drag: rand(0.985, 0.995)
+          };
+        }
+
+        function drawParticle(p) {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate(p.rot);
+          ctx.fillStyle = p.color;
+
+          // slight 3D feel: draw a small highlight strip sometimes
+          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+          if (Math.random() < 0.08) {
+            ctx.globalAlpha = 0.35;
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(-p.w/2, -p.h/2, Math.max(1, p.w/3), p.h);
+            ctx.globalAlpha = 1;
+          }
+          ctx.restore();
+        }
+
+        function step() {
+          ctx.clearRect(0, 0, W, H);
+
+          particles = particles.filter(p => p.age < p.life);
+
+          for (const p of particles) {
+            p.vx *= p.drag;
+            p.vy *= p.drag;
+
+            p.vy += p.g;
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rot += p.vr;
+            p.age++;
+
+            // fade towards the end
+            const t = 1 - (p.age / p.life);
+            ctx.globalAlpha = Math.max(0, Math.min(1, t));
+
+            drawParticle(p);
+            ctx.globalAlpha = 1;
+          }
+
+          if (particles.length) {
+            raf = requestAnimationFrame(step);
+          } else {
+            stop();
+          }
+        }
+
+        function start() {
+          if (running) return;
+          running = true;
+          canvas.style.opacity = "1";
+          raf = requestAnimationFrame(step);
+        }
+
+        function stop() {
+          running = false;
+          canvas.style.opacity = "0";
+          if (raf) cancelAnimationFrame(raf);
+          raf = null;
+          particles = [];
+        }
+
+        function burstCannons() {
+          resize();
+
+          // Two cannons: bottom-left and bottom-right
+          const leftX = W * 0.10;
+          const rightX = W * 0.90;
+          const y = H * 0.82;
+
+          // Emit arcs: left shoots to the right/up, right shoots to the left/up
+          function emit(x, baseAngle, spread, count) {
+            for (let i = 0; i < count; i++) {
+              const a = baseAngle + rand(-spread, spread);
+              const speed = rand(7.5, 12.5);
+              particles.push(makeParticle(x + rand(-10, 10), y + rand(-8, 8), a, speed));
+            }
+          }
+
+          // angles in radians
+          const deg = (d) => d * Math.PI / 180;
+
+          // Left cannon: 300°..340° (up-right)
+          emit(leftX, deg(-55), deg(18), 95);
+          // Right cannon: 200°..240° (up-left)
+          emit(rightX, deg(-125), deg(18), 95);
+
+          // a small center sprinkle for fullness
+          const centerX = W * 0.50;
+          emit(centerX, deg(-90), deg(20), 45);
+
+          start();
+        }
+
+        window.addEventListener("resize", () => { if (running) resize(); });
+
+        return { burstCannons };
+      })();
+      // -------------------------------------------------------
 
       function show(which) {
         if (which === "pages") {
@@ -422,11 +595,19 @@
           dotsWrap.appendChild(d);
         }
 
-        // change the “go next” text on last page
-        if (idx === total - 1) {
-          nextText.textContent = "That’s it swee 😘";
-        } else {
-          nextText.textContent = "Go to next page swee 🤘";
+        // next text
+        if (idx === 0) nextText.textContent = "Curious already? go on swee 🔥";
+        else if (idx === 1) nextText.textContent = "There’s more waiting for you 💫";
+        else if (idx === 2) nextText.textContent = "One last page… don’t rush 💞";
+        else nextText.textContent = "That’s it swee 😘";
+
+        // 🎉 Fire stage-cannon confetti ONLY on Page 3 (idx = 2)
+        if (idx === 2 && !window.__cannonFired) {
+          window.__cannonFired = true;
+          confetti.burstCannons();
+        }
+        if (idx !== 2) {
+          window.__cannonFired = false;
         }
       }
 
