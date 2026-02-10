@@ -96,45 +96,99 @@
     /* --- “Pages” / slider --- */
     .view{display:none;}
     .view.active{display:block;}
-
+    
+    .card.big{
+      padding: 26px;
+      display:flex;
+      flex-direction:column;
+    }
+    
+    /* Slider takes available height so content doesn't look stuck at top */
     .slider{
       position:relative;
       overflow:hidden;
       border-radius: calc(var(--radius) - 2px);
+      min-height: 62vh;
+      flex: 1;
     }
+    
     .track{
       display:flex;
       transition: transform 380ms ease;
       will-change: transform;
+      position:relative;
     }
+    
     .slide{
       min-width:100%;
-      padding: 0;
+      padding: 18px 6px;
+    
+      /* center content */
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap: 10px;
+    
+      /* for background layer */
+      position:relative;
     }
-
+    
+    /* subtle decorative background */
+    .slide::before{
+      content:"";
+      position:absolute;
+      inset: 0;
+      background:
+        radial-gradient(600px 280px at 15% 25%, rgba(255,204,102,.10), transparent 55%),
+        radial-gradient(520px 260px at 85% 35%, rgba(255,111,177,.10), transparent 55%);
+      pointer-events:none;
+      opacity:.9;
+      z-index: 0;
+    }
+    
+    /* keep slide content above the ::before layer */
+    .slide > *{
+      position:relative;
+      z-index: 1;
+    }
+    
+    /* Bottom navigation */
     .nav{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap: 10px;
-      margin-top: 16px;
+      margin-top: 14px;
       user-select:none;
     }
+    
     .nav-left, .nav-right{
-      display:flex; align-items:center; gap: 10px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
     }
-
+    
     .arrow{
       width:44px;height:44px;border-radius:999px;
       border:1px solid var(--line);
       background:linear-gradient(180deg,#ffffff18,#ffffff08);
       color:var(--text);
       cursor:pointer;
-      display:grid;place-items:center;
+      display:grid;
+      place-items:center;
       transition: transform .12s ease, border-color .12s ease;
     }
-    .arrow:hover{transform:translateY(-1px);border-color:#ffffff2c;}
-    .arrow:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+    
+    .arrow:hover{
+      transform:translateY(-1px);
+      border-color:#ffffff2c;
+    }
+    
+    .arrow:disabled{
+      opacity:.35;
+      cursor:not-allowed;
+      transform:none;
+    }
 
     .dots{
       display:flex; align-items:center; justify-content:center;
@@ -207,6 +261,7 @@
             <div class="slide">
               <div class="badge">✅ Correct!</div>
               <h1>Wohooo you got it right, Sweety! 💖</h1>
+              <p class="tiny">✨💛✨</p>
               <p class="sub">As always, you are always right, swee 😘</p>
               <hr class="sep" />
               <p class="lead">
@@ -219,6 +274,7 @@
             <!-- PAGE 2 -->
             <div class="slide">
               <h1>And wait a sec now…</h1>
+              <p class="tiny">✨💛✨</p>
               <p class="lead">
                 What does <b>3 cubes</b> even mean?<br />
                 Let’s figure it out ✨
@@ -238,6 +294,7 @@
             <!-- PAGE 3 -->
             <div class="slide">
               <h1>Wish you a very Happiee 27th Birthday, Sweety 🎂</h1>
+              <p class="tiny">✨💛✨</p>
             
               <div class="photo-wrap">
                 <img class="photo" src="swee_27.png" alt="Sweety 27th birthday photo" />
@@ -254,6 +311,7 @@
             <!-- PAGE 4 -->
             <div class="slide">
               <h1>One last thing… 💞</h1>
+              <p class="tiny">✨💛✨</p>
               <div class="cheezy">
                 <p>
                   Last but not the least 😄<br />
