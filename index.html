@@ -163,7 +163,7 @@
       to{ opacity: 1; transform: translateY(0); }
     }
 
-    ..nav{
+    .nav{
       display:grid;
       grid-template-columns: auto 1fr auto;
       align-items:center;              /* KEY: vertical alignment */
@@ -403,276 +403,246 @@
   <canvas id="confettiCanvas" aria-hidden="true"></canvas>
 
   <script>
-    (function () {
-      const viewQuestion = document.getElementById("view-question");
-      const viewPages = document.getElementById("view-pages");
+  (function () {
+    const viewQuestion = document.getElementById("view-question");
+    const viewPages = document.getElementById("view-pages");
 
-      const hint = document.getElementById("hint");
-      const choices = document.querySelectorAll(".choice[data-answer]");
+    const hint = document.getElementById("hint");
+    const choices = document.querySelectorAll(".choice[data-answer]");
 
-      const track = document.getElementById("track");
-      const prevBtn = document.getElementById("prevBtn");
-      const nextBtn = document.getElementById("nextBtn");
-      const dotsWrap = document.getElementById("dots");
-      const nextText = document.getElementById("nextText");
-      const backToQuestion = document.getElementById("backToQuestion");
+    const track = document.getElementById("track");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const dotsWrap = document.getElementById("dots");
+    const nextText = document.getElementById("nextText");
+    const backToQuestion = document.getElementById("backToQuestion");
 
-      const slides = Array.from(track.querySelectorAll(".slide"));
-      const total = slides.length;
-      let idx = 0;
+    const slides = Array.from(track.querySelectorAll(".slide"));
+    const total = slides.length;
+    let idx = 0;
 
-      // ---------- Stage-cannon confetti (NO emojis) ----------
-      const confetti = (() => {
-        const canvas = document.getElementById("confettiCanvas");
-        const ctx = canvas.getContext("2d");
+    // ---------- Stage-cannon confetti (NO emojis) ----------
+    const confetti = (() => {
+      const canvas = document.getElementById("confettiCanvas");
+      const ctx = canvas.getContext("2d");
 
-        let W = 0, H = 0, dpr = 1;
-        let particles = [];
-        let raf = null;
-        let running = false;
+      let W = 0, H = 0, dpr = 1;
+      let particles = [];
+      let raf = null;
+      let running = false;
 
-        function resize() {
-          dpr = Math.max(1, window.devicePixelRatio || 1);
-          canvas.width = Math.floor(window.innerWidth * dpr);
-          canvas.height = Math.floor(window.innerHeight * dpr);
-          canvas.style.width = window.innerWidth + "px";
-          canvas.style.height = window.innerHeight + "px";
+      function resize() {
+        dpr = Math.max(1, window.devicePixelRatio || 1);
+        canvas.width = Math.floor(window.innerWidth * dpr);
+        canvas.height = Math.floor(window.innerHeight * dpr);
+        canvas.style.width = window.innerWidth + "px";
+        canvas.style.height = window.innerHeight + "px";
 
-          // draw in CSS pixels
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          W = window.innerWidth;
-          H = window.innerHeight;
-        }
-
-        function rand(min, max){ return Math.random() * (max - min) + min; }
-
-        // confetti palette (poppers vibe)
-        const colors = [
-          "#ffcc66", "#ff6fb1", "#b9ffe6", "#ffffff", "#c9cdef",
-          "#ffd1e8", "#ffe7a3"
-        ];
-
-        function makeParticle(x, y, angleRad, speed) {
-          const isStreamer = Math.random() < 0.22; // some long streamers
-          const w = isStreamer ? rand(2, 4) : rand(4, 8);
-          const h = isStreamer ? rand(18, 34) : rand(6, 12);
-
-          return {
-            x, y,
-            vx: Math.cos(angleRad) * speed + rand(-0.6, 0.6),
-            vy: Math.sin(angleRad) * speed + rand(-0.6, 0.6),
-            g: rand(0.12, 0.18),
-            rot: rand(0, Math.PI * 2),
-            vr: rand(-0.18, 0.18),
-            w, h,
-            color: colors[(Math.random() * colors.length) | 0],
-            life: rand(120, 160),
-            age: 0,
-            drag: rand(0.985, 0.995)
-          };
-        }
-
-        function drawParticle(p) {
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate(p.rot);
-          ctx.fillStyle = p.color;
-
-          // slight 3D feel: draw a small highlight strip sometimes
-          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
-          if (Math.random() < 0.08) {
-            ctx.globalAlpha = 0.35;
-            ctx.fillStyle = "#ffffff";
-            ctx.fillRect(-p.w/2, -p.h/2, Math.max(1, p.w/3), p.h);
-            ctx.globalAlpha = 1;
-          }
-          ctx.restore();
-        }
-
-        function step() {
-          ctx.clearRect(0, 0, W, H);
-
-          particles = particles.filter(p => p.age < p.life);
-
-          for (const p of particles) {
-            p.vx *= p.drag;
-            p.vy *= p.drag;
-
-            p.vy += p.g;
-            p.x += p.vx;
-            p.y += p.vy;
-            p.rot += p.vr;
-            p.age++;
-
-            // fade towards the end
-            const t = 1 - (p.age / p.life);
-            ctx.globalAlpha = Math.max(0, Math.min(1, t));
-
-            drawParticle(p);
-            ctx.globalAlpha = 1;
-          }
-
-          if (particles.length) {
-            raf = requestAnimationFrame(step);
-          } else {
-            stop();
-          }
-        }
-
-        function start() {
-          if (running) return;
-          running = true;
-          canvas.style.opacity = "1";
-          raf = requestAnimationFrame(step);
-        }
-
-        function stop() {
-          running = false;
-          canvas.style.opacity = "0";
-          if (raf) cancelAnimationFrame(raf);
-          raf = null;
-          particles = [];
-        }
-
-        function burstCannons() {
-          resize();
-
-          // Two cannons: bottom-left and bottom-right
-          const leftX = W * 0.10;
-          const rightX = W * 0.90;
-          const y = H * 0.82;
-
-          // Emit arcs: left shoots to the right/up, right shoots to the left/up
-          function emit(x, baseAngle, spread, count) {
-            for (let i = 0; i < count; i++) {
-              const a = baseAngle + rand(-spread, spread);
-              const speed = rand(7.5, 12.5);
-              particles.push(makeParticle(x + rand(-10, 10), y + rand(-8, 8), a, speed));
-            }
-          }
-
-          // angles in radians
-          const deg = (d) => d * Math.PI / 180;
-
-          // Left cannon: 300°..340° (up-right)
-          emit(leftX, deg(-55), deg(18), 95);
-          // Right cannon: 200°..240° (up-left)
-          emit(rightX, deg(-125), deg(18), 95);
-
-          // a small center sprinkle for fullness
-          const centerX = W * 0.50;
-          emit(centerX, deg(-90), deg(20), 45);
-
-          start();
-        }
-
-        window.addEventListener("resize", () => { if (running) resize(); });
-
-        return { burstCannons };
-      })();
-      // -------------------------------------------------------
-
-      function show(which) {
-        if (which === "pages") {
-          viewQuestion.classList.remove("active");
-          viewPages.classList.add("active");
-          window.location.hash = "#pages";
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          render();
-        } else {
-          viewPages.classList.remove("active");
-          viewQuestion.classList.add("active");
-          if (hint) hint.textContent = "";
-          window.location.hash = "";
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        W = window.innerWidth;
+        H = window.innerHeight;
       }
 
-      function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+      function rand(min, max){ return Math.random() * (max - min) + min; }
 
-      function go(n) {
-        idx = clamp(n, 0, total - 1);
-        render();
+      const colors = [
+        "#ffcc66", "#ff6fb1", "#b9ffe6", "#ffffff", "#c9cdef",
+        "#ffd1e8", "#ffe7a3"
+      ];
+
+      function makeParticle(x, y, angleRad, speed) {
+        const isStreamer = Math.random() < 0.22;
+        const w = isStreamer ? rand(2, 4) : rand(4, 8);
+        const h = isStreamer ? rand(18, 34) : rand(6, 12);
+
+        return {
+          x, y,
+          vx: Math.cos(angleRad) * speed + rand(-0.6, 0.6),
+          vy: Math.sin(angleRad) * speed + rand(-0.6, 0.6),
+          g: rand(0.12, 0.18),
+          rot: rand(0, Math.PI * 2),
+          vr: rand(-0.18, 0.18),
+          w, h,
+          color: colors[(Math.random() * colors.length) | 0],
+          life: rand(160, 240),   // ✅ longer duration
+          age: 0,
+          drag: rand(0.985, 0.995)
+        };
       }
 
-      function render() {
-        track.style.transform = `translateX(${-idx * 100}%)`;
+      function drawParticle(p) {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
 
-        prevBtn.disabled = idx === 0;
-        nextBtn.disabled = idx === total - 1;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      }
 
-        // dots
-        dotsWrap.innerHTML = "";
-        for (let i = 0; i < total; i++) {
-          const d = document.createElement("button");
-          d.className = "dot" + (i === idx ? " active" : "");
-          d.setAttribute("aria-label", `Go to page ${i + 1}`);
-          d.addEventListener("click", () => go(i));
-          dotsWrap.appendChild(d);
+      function step() {
+        ctx.clearRect(0, 0, W, H);
+        particles = particles.filter(p => p.age < p.life);
+
+        for (const p of particles) {
+          p.vx *= p.drag;
+          p.vy *= p.drag;
+
+          p.vy += p.g;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.rot += p.vr;
+          p.age++;
+
+          const t = 1 - (p.age / p.life);
+          ctx.globalAlpha = Math.max(0, Math.min(1, t));
+          drawParticle(p);
+          ctx.globalAlpha = 1;
         }
 
-        // next text
-        if (idx === 0) nextText.textContent = "Curious already? go on swee 🔥";
-        else if (idx === 1) nextText.textContent = "There’s more waiting for you 💫";
-        else if (idx === 2) nextText.textContent = "One last page… don’t rush 💞";
-        else nextText.textContent = "That’s it swee 😘";
+        if (particles.length) raf = requestAnimationFrame(step);
+        else stop();
+      }
 
-        // 🎉 Fire stage-cannon confetti ONLY on Page 3 (idx = 2)
-        if (idx === 2 && !window.__cannonFired) {
-          window.__cannonFired = true;
-        
-          // boom #1
-          confetti.burstCannons();
-        
-          // boom #2 (after a short delay)
-          setTimeout(() => confetti.burstCannons(), 500);
-        }
-        
-        if (idx !== 2) {
-          window.__cannonFired = false;
-        }
+      function start() {
+        if (running) return;
+        running = true;
+        canvas.style.opacity = "1";
+        raf = requestAnimationFrame(step);
+      }
 
+      function stop() {
+        running = false;
+        canvas.style.opacity = "0";
+        if (raf) cancelAnimationFrame(raf);
+        raf = null;
+        particles = [];
+      }
 
-      // Answer buttons
-      choices.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const ans = btn.getAttribute("data-answer");
-          if (ans === "3") {
-            idx = 0;
-            show("pages");
-          } else {
-            if (hint) hint.textContent = "Hehe not this one 😄 Try again, Sweety 💕";
-            btn.animate(
-              [
-                { transform: "translateX(0)" },
-                { transform: "translateX(-6px)" },
-                { transform: "translateX(6px)" },
-                { transform: "translateX(0)" }
-              ],
-              { duration: 220, iterations: 1 }
-            );
+      function burstCannons() {
+        resize();
+
+        const leftX = W * 0.10;
+        const rightX = W * 0.90;
+        const y = H * 0.82;
+
+        function emit(x, baseAngle, spread, count) {
+          for (let i = 0; i < count; i++) {
+            const a = baseAngle + rand(-spread, spread);
+            const speed = rand(7.5, 12.5);
+            particles.push(makeParticle(x + rand(-10, 10), y + rand(-8, 8), a, speed));
           }
-        });
-      });
+        }
 
-      // arrows
-      prevBtn.addEventListener("click", () => go(idx - 1));
-      nextBtn.addEventListener("click", () => go(idx + 1));
+        const deg = (d) => d * Math.PI / 180;
 
-      // keyboard support
-      window.addEventListener("keydown", (e) => {
-        if (!viewPages.classList.contains("active")) return;
-        if (e.key === "ArrowLeft") go(idx - 1);
-        if (e.key === "ArrowRight") go(idx + 1);
-      });
+        emit(leftX, deg(-55), deg(18), 95);
+        emit(rightX, deg(-125), deg(18), 95);
 
-      // back
-      backToQuestion.addEventListener("click", () => show("question"));
+        const centerX = W * 0.50;
+        emit(centerX, deg(-90), deg(20), 45);
 
-      // load hash
-      if (window.location.hash === "#pages") show("pages");
-      else render();
+        start();
+      }
+
+      window.addEventListener("resize", () => { if (running) resize(); });
+
+      return { burstCannons };
     })();
-  </script>
+    // -------------------------------------------------------
+
+    function show(which) {
+      if (which === "pages") {
+        viewQuestion.classList.remove("active");
+        viewPages.classList.add("active");
+        window.location.hash = "#pages";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        render();
+      } else {
+        viewPages.classList.remove("active");
+        viewQuestion.classList.add("active");
+        if (hint) hint.textContent = "";
+        window.location.hash = "";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
+    function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+    function go(n) {
+      idx = clamp(n, 0, total - 1);
+      render();
+    }
+
+    function render() {
+      track.style.transform = `translateX(${-idx * 100}%)`;
+
+      prevBtn.disabled = idx === 0;
+      nextBtn.disabled = idx === total - 1;
+
+      dotsWrap.innerHTML = "";
+      for (let i = 0; i < total; i++) {
+        const d = document.createElement("button");
+        d.className = "dot" + (i === idx ? " active" : "");
+        d.setAttribute("aria-label", `Go to page ${i + 1}`);
+        d.addEventListener("click", () => go(i));
+        dotsWrap.appendChild(d);
+      }
+
+      if (idx === 0) nextText.textContent = "Curious already? go on swee 🔥";
+      else if (idx === 1) nextText.textContent = "There’s more waiting for you 💫";
+      else if (idx === 2) nextText.textContent = "One last page… don’t rush 💞";
+      else nextText.textContent = "That’s it swee 😘";
+
+      // 🎉 Fire ONLY on Page 3 (idx = 2) — double boom
+      if (idx === 2 && !window.__cannonFired) {
+        window.__cannonFired = true;
+        confetti.burstCannons();                 // boom #1
+        setTimeout(() => confetti.burstCannons(), 500); // boom #2
+      }
+      if (idx !== 2) window.__cannonFired = false;
+    }
+
+    // Answer buttons
+    choices.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const ans = btn.getAttribute("data-answer");
+        if (ans === "3") {
+          idx = 0;
+          show("pages");
+        } else {
+          if (hint) hint.textContent = "Hehe not this one 😄 Try again, Sweety 💕";
+          btn.animate(
+            [
+              { transform: "translateX(0)" },
+              { transform: "translateX(-6px)" },
+              { transform: "translateX(6px)" },
+              { transform: "translateX(0)" }
+            ],
+            { duration: 220, iterations: 1 }
+          );
+        }
+      });
+    });
+
+    // arrows
+    prevBtn.addEventListener("click", () => go(idx - 1));
+    nextBtn.addEventListener("click", () => go(idx + 1));
+
+    // keyboard support
+    window.addEventListener("keydown", (e) => {
+      if (!viewPages.classList.contains("active")) return;
+      if (e.key === "ArrowLeft") go(idx - 1);
+      if (e.key === "ArrowRight") go(idx + 1);
+    });
+
+    backToQuestion.addEventListener("click", () => show("question"));
+
+    // load hash
+    if (window.location.hash === "#pages") show("pages");
+    else render();
+  })();
+</script>
+
 </body>
 </html>
