@@ -17,192 +17,141 @@
       --shadow: 0 14px 50px rgba(0,0,0,.45);
       --radius: 18px;
     }
-
     *{box-sizing:border-box}
     body{
-      margin:0;
-      min-height:100vh;
+      margin:0; min-height:100vh;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       color:var(--text);
       background: radial-gradient(1200px 800px at 20% 10%, #2b2f63 0%, transparent 60%),
                   radial-gradient(900px 650px at 80% 30%, #4a235a 0%, transparent 55%),
                   linear-gradient(180deg, var(--bg1), var(--bg2));
     }
-
-    .container{
-      max-width: 860px;
-      margin: 0 auto;
-      padding: 28px 16px 40px;
-    }
-
-    .hero{
-      text-align:center;
-      margin: 18px 0 18px;
-    }
-
-    h1{
-      margin:0 0 10px;
-      font-size: clamp(26px, 4vw, 44px);
-      letter-spacing: .2px;
-    }
-
-    .sub{
-      margin:0;
-      color: var(--muted);
-      font-size: clamp(15px, 2vw, 18px);
-      line-height: 1.5;
-    }
-
+    .container{max-width:900px;margin:0 auto;padding:28px 16px 40px;}
+    .hero{text-align:center;margin:18px 0 18px;}
+    h1{margin:0 0 10px;font-size:clamp(26px,4vw,44px);letter-spacing:.2px;}
+    .sub{margin:0;color:var(--muted);font-size:clamp(15px,2vw,18px);line-height:1.5;}
     .card{
-      margin: 18px auto;
-      padding: 22px;
-      border: 1px solid var(--line);
-      background: var(--card);
-      box-shadow: var(--shadow);
-      border-radius: var(--radius);
+      margin:18px auto; padding:22px;
+      border:1px solid var(--line);
+      background:var(--card);
+      box-shadow:var(--shadow);
+      border-radius:var(--radius);
       backdrop-filter: blur(10px);
     }
-
-    .card.big{
-      padding: 26px;
-    }
-
-    .art-wrap{
-      display:flex;
-      justify-content:center;
-      padding: 18px 10px 8px;
-    }
-
+    .card.big{padding:26px;}
+    .art-wrap{display:flex;justify-content:center;padding:18px 10px 8px;}
     .art{
-      width: min(520px, 100%);
-      height:auto;
-      filter: drop-shadow(0 20px 30px rgba(0,0,0,.35));
-      user-select:none;
-      -webkit-user-drag:none;
+      width:min(520px,100%);height:auto;
+      filter:drop-shadow(0 20px 30px rgba(0,0,0,.35));
+      user-select:none;-webkit-user-drag:none;
     }
-
-    .options{
-      display:flex;
-      gap: 12px;
-      justify-content:center;
-      padding: 14px 0 4px;
-      flex-wrap: wrap;
-    }
-
+    .options{display:flex;gap:12px;justify-content:center;padding:14px 0 4px;flex-wrap:wrap;}
     .choice{
-      appearance:none;
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, #ffffff18, #ffffff08);
-      color: var(--text);
-      padding: 12px 18px;
-      font-size: 18px;
-      border-radius: 14px;
-      cursor:pointer;
-      min-width: 88px;
+      appearance:none; border:1px solid var(--line);
+      background:linear-gradient(180deg,#ffffff18,#ffffff08);
+      color:var(--text); padding:12px 18px; font-size:18px;
+      border-radius:14px; cursor:pointer; min-width:88px;
       transition: transform .12s ease, border-color .12s ease, box-shadow .12s ease;
     }
-
-    .choice:hover{
-      transform: translateY(-2px);
-      border-color: #ffffff2c;
-      box-shadow: 0 10px 30px rgba(0,0,0,.25);
-    }
-
-    .choice:active{ transform: translateY(0); }
-
-    .hint{
-      text-align:center;
-      min-height: 22px;
-      color: var(--accent2);
-      margin: 10px 0 0;
-      font-weight: 600;
-    }
-
-    .footer{
-      text-align:center;
-      margin-top: 18px;
-      color: #ffffff88;
-      font-size: 13px;
-    }
+    .choice:hover{transform:translateY(-2px);border-color:#ffffff2c;box-shadow:0 10px 30px rgba(0,0,0,.25);}
+    .choice:active{transform:translateY(0);}
+    .hint{text-align:center;min-height:22px;color:var(--accent2);margin:10px 0 0;font-weight:600;}
+    .footer{text-align:center;margin-top:18px;color:#ffffff88;font-size:13px;}
 
     .badge{
-      display:inline-block;
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight: 700;
-      background: #2dffb31a;
-      border: 1px solid #2dffb34d;
-      color: #b9ffe6;
-      margin-bottom: 10px;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:7px 12px; border-radius:999px; font-weight:800;
+      background:#2dffb31a; border:1px solid #2dffb34d; color:#b9ffe6;
+      margin-bottom:12px;
     }
-
-    .sep{
-      border:0;
-      border-top:1px solid var(--line);
-      margin: 18px 0;
-    }
-
-    .lead{
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.55;
-    }
-
+    .sep{border:0;border-top:1px solid var(--line);margin:18px 0;}
+    .lead{color:var(--muted);font-size:17px;line-height:1.55;}
     .math{
-      margin: 14px 0 18px;
-      padding: 14px;
-      border-radius: 16px;
-      border: 1px solid var(--line);
-      background: #00000025;
+      margin:14px 0 18px; padding:14px;
+      border-radius:16px; border:1px solid var(--line); background:#00000025;
     }
-
-    .math-row{
-      display:flex;
-      gap: 10px;
-      justify-content:center;
-      align-items:baseline;
-      flex-wrap: wrap;
-      font-size: 20px;
-    }
-
-    .big-num{
-      color: var(--accent);
-      font-size: 32px;
-      font-weight: 900;
-    }
-
-    h2{
-      margin: 16px 0 10px;
-      font-size: clamp(20px, 3vw, 28px);
-    }
-
+    .math-row{display:flex;gap:10px;justify-content:center;align-items:baseline;flex-wrap:wrap;font-size:20px;}
+    .big-num{color:var(--accent);font-size:34px;font-weight:900;}
+    h2{margin:16px 0 10px;font-size:clamp(20px,3vw,28px);}
     .cheezy{
-      margin-top: 14px;
-      padding: 14px 16px;
-      border-radius: 16px;
-      border: 1px dashed #ffffff2a;
-      background: linear-gradient(180deg, #ff6fb112, transparent);
-      color: #ffe9f4;
+      margin-top:14px; padding:14px 16px;
+      border-radius:16px; border:1px dashed #ffffff2a;
+      background:linear-gradient(180deg,#ff6fb112,transparent);
+      color:#ffe9f4; line-height:1.6;
+    }
+
+    /* --- “Pages” / slider --- */
+    .view{display:none;}
+    .view.active{display:block;}
+
+    .slider{
+      position:relative;
+      overflow:hidden;
+      border-radius: calc(var(--radius) - 2px);
+    }
+    .track{
+      display:flex;
+      transition: transform 380ms ease;
+      will-change: transform;
+    }
+    .slide{
+      min-width:100%;
+      padding: 0;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-top: 16px;
+      user-select:none;
+    }
+    .nav-left, .nav-right{
+      display:flex; align-items:center; gap: 10px;
+    }
+
+    .arrow{
+      width:44px;height:44px;border-radius:999px;
+      border:1px solid var(--line);
+      background:linear-gradient(180deg,#ffffff18,#ffffff08);
+      color:var(--text);
+      cursor:pointer;
+      display:grid;place-items:center;
+      transition: transform .12s ease, border-color .12s ease;
+    }
+    .arrow:hover{transform:translateY(-1px);border-color:#ffffff2c;}
+    .arrow:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+
+    .dots{
+      display:flex; align-items:center; justify-content:center;
+      gap:8px;
+      flex: 1;
+    }
+    .dot{
+      width:9px;height:9px;border-radius:999px;
+      background:#ffffff3a;
+      border:1px solid #ffffff2a;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease;
+    }
+    .dot.active{
+      background: var(--accent);
+      transform: scale(1.25);
+      border-color: #ffffff55;
+    }
+
+    .next-text{
+      color: #ffffffb8;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .tiny{
+      font-size: 14px;
+      color: var(--muted);
       line-height: 1.6;
     }
-
-    .link-btn{
-      display:inline-block;
-      margin-top: 18px;
-      color: #ffffffcc;
-      text-decoration:none;
-      border-bottom: 1px solid #ffffff44;
-      padding-bottom: 3px;
-      cursor:pointer;
-      background: transparent;
-      border-left:0;border-right:0;border-top:0;
-      font-size: 15px;
-    }
-    .link-btn:hover{ color:white; border-bottom-color:white; }
-
-    /* views */
-    .view { display:none; }
-    .view.active { display:block; }
   </style>
 </head>
 <body>
@@ -234,46 +183,95 @@
       </footer>
     </section>
 
-    <!-- VIEW 2: REVEAL -->
-    <section id="view-reveal" class="view">
+    <!-- VIEW 2: “PAGES” AFTER CORRECT -->
+    <section id="view-pages" class="view">
       <section class="card big">
-        <div class="badge">✅ Correct!</div>
-        <h1>Wohooo you got it right, Sweety! 💖</h1>
-        <p class="sub">As always, you are always right, swee 😘</p>
 
-        <hr class="sep" />
+        <div class="slider" aria-label="Birthday pages slider">
+          <div id="track" class="track">
 
-        <p class="lead">
-          And wait a sec now… what does <b>3 cubes</b> even mean?<br />
-          Let’s figure it out ✨
-        </p>
+            <!-- PAGE 1 -->
+            <div class="slide">
+              <div class="badge">✅ Correct!</div>
+              <h1>Wohooo you got it right, Sweety! 💖</h1>
+              <p class="sub">As always, you are always right, swee 😘</p>
+              <hr class="sep" />
+              <p class="lead">
+                Okay okay… now don’t get overconfident 😄<br />
+                I have a tiny surprise for you…
+              </p>
+              <p class="tiny">Use the arrows below, swee 🥺</p>
+            </div>
 
-        <div class="math">
-          <div class="math-row">
-            <span>3 cubes</span><span>=</span><span>3³</span><span>=</span><span class="big-num">27</span>
+            <!-- PAGE 2 -->
+            <div class="slide">
+              <h1>And wait a sec now…</h1>
+              <p class="lead">
+                What does <b>3 cubes</b> even mean?<br />
+                Let’s figure it out ✨
+              </p>
+
+              <div class="math">
+                <div class="math-row">
+                  <span>3 cubes</span><span>=</span><span>3³</span><span>=</span><span class="big-num">27</span>
+                </div>
+              </div>
+
+              <p class="tiny">
+                (I know, I know… I’m a genius 😌)
+              </p>
+            </div>
+
+            <!-- PAGE 3 -->
+            <div class="slide">
+              <h1>Wish you a very happy 27th birthday, Sweety 🎂</h1>
+              <p class="lead">
+                May God bless you with sound knowledge and good health for the rest of your life.
+              </p>
+              <p class="tiny">
+                And may your smile stay exactly like this… forever 💛
+              </p>
+            </div>
+
+            <!-- PAGE 4 -->
+            <div class="slide">
+              <h1>One last thing… 💞</h1>
+              <div class="cheezy">
+                <p>
+                  Cheezy romantic line alert 😄<br />
+                  You’ve successfully completed <b>27%</b> of your life…
+                  and the next <b>73%</b> is going to be a beautiful adventure —
+                  even more happy and jolly… because <b>Sudhamsh is here now</b>, Sweety 😉💞
+                </p>
+              </div>
+
+              <p class="tiny" style="margin-top:14px;">
+                Always yours,<br />
+                <b>Sudhamsh</b> 💛
+              </p>
+            </div>
+
           </div>
         </div>
 
-        <h2>Wish you a very happy 27th birthday, Sweety 🎂</h2>
+        <!-- Bottom navigation (arrows + dots + “go next” text) -->
+        <div class="nav" aria-label="Slider navigation">
+          <div class="nav-left">
+            <button id="prevBtn" class="arrow" aria-label="Previous page">←</button>
+          </div>
 
-        <p>
-          May God bless you with sound knowledge and good health for the rest of your life.
-        </p>
+          <div id="dots" class="dots" aria-label="Page indicators"></div>
 
-        <div class="cheezy">
-          <p>
-            Cheezy romantic line alert 😄<br />
-            You’ve successfully completed <b>27%</b> of your life…
-            and the next <b>73%</b> is going to be a beautiful adventure —
-            even more happy and jolly… because <b>Sudhamsh is here now</b>, Sweety 😉💞
-          </p>
+          <div class="nav-right">
+            <span id="nextText" class="next-text">Go to next page swee 🤘</span>
+            <button id="nextBtn" class="arrow" aria-label="Next page">→</button>
+          </div>
         </div>
 
-        <button id="backBtn" class="link-btn">← Go back</button>
       </section>
 
       <footer class="footer">
-        <span>Always yours, Sudhamsh 💛</span>
+        <button id="backToQuestion" class="choice" style="min-width:auto;">← Back to cubes</button>
       </footer>
     </section>
 
@@ -282,32 +280,76 @@
   <script>
     (function () {
       const viewQuestion = document.getElementById("view-question");
-      const viewReveal = document.getElementById("view-reveal");
+      const viewPages = document.getElementById("view-pages");
+
       const hint = document.getElementById("hint");
-      const choices = document.querySelectorAll(".choice");
-      const backBtn = document.getElementById("backBtn");
+      const choices = document.querySelectorAll(".choice[data-answer]");
+
+      const track = document.getElementById("track");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const dotsWrap = document.getElementById("dots");
+      const nextText = document.getElementById("nextText");
+      const backToQuestion = document.getElementById("backToQuestion");
+
+      const slides = Array.from(track.querySelectorAll(".slide"));
+      const total = slides.length;
+      let idx = 0;
 
       function show(which) {
-        if (which === "reveal") {
+        if (which === "pages") {
           viewQuestion.classList.remove("active");
-          viewReveal.classList.add("active");
-          // optional: update hash so refresh keeps reveal page
-          window.location.hash = "#reveal";
+          viewPages.classList.add("active");
+          window.location.hash = "#pages";
+          window.scrollTo({ top: 0, behavior: "smooth" });
+          render();
         } else {
-          viewReveal.classList.remove("active");
+          viewPages.classList.remove("active");
           viewQuestion.classList.add("active");
           if (hint) hint.textContent = "";
           window.location.hash = "";
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
-        window.scrollTo({ top: 0, behavior: "smooth" });
       }
 
-      // Handle answer clicks
+      function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+      function go(n) {
+        idx = clamp(n, 0, total - 1);
+        render();
+      }
+
+      function render() {
+        track.style.transform = `translateX(${-idx * 100}%)`;
+
+        prevBtn.disabled = idx === 0;
+        nextBtn.disabled = idx === total - 1;
+
+        // dots
+        dotsWrap.innerHTML = "";
+        for (let i = 0; i < total; i++) {
+          const d = document.createElement("button");
+          d.className = "dot" + (i === idx ? " active" : "");
+          d.setAttribute("aria-label", `Go to page ${i + 1}`);
+          d.addEventListener("click", () => go(i));
+          dotsWrap.appendChild(d);
+        }
+
+        // change the “go next” text on last page
+        if (idx === total - 1) {
+          nextText.textContent = "That’s it swee 😘";
+        } else {
+          nextText.textContent = "Go to next page swee 🤘";
+        }
+      }
+
+      // Answer buttons
       choices.forEach((btn) => {
         btn.addEventListener("click", () => {
           const ans = btn.getAttribute("data-answer");
           if (ans === "3") {
-            show("reveal");
+            idx = 0;
+            show("pages");
           } else {
             if (hint) hint.textContent = "Hehe not this one 😄 Try again, Sweety 💕";
             btn.animate(
@@ -323,11 +365,23 @@
         });
       });
 
-      // Back button
-      backBtn.addEventListener("click", () => show("question"));
+      // arrows
+      prevBtn.addEventListener("click", () => go(idx - 1));
+      nextBtn.addEventListener("click", () => go(idx + 1));
 
-      // If user loads with #reveal in URL, show reveal
-      if (window.location.hash === "#reveal") show("reveal");
+      // keyboard support
+      window.addEventListener("keydown", (e) => {
+        if (!viewPages.classList.contains("active")) return;
+        if (e.key === "ArrowLeft") go(idx - 1);
+        if (e.key === "ArrowRight") go(idx + 1);
+      });
+
+      // back
+      backToQuestion.addEventListener("click", () => show("question"));
+
+      // load hash
+      if (window.location.hash === "#pages") show("pages");
+      else render();
     })();
   </script>
 </body>
