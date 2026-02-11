@@ -266,6 +266,71 @@
       }
     }
 
+
+    /* --- Romantic hearts background for text pages --- */
+    .romantic{
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .romantic::after{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 0, 80, .18) 0 18px, transparent 19px),
+        radial-gradient(circle at 18% 18%, rgba(255, 0, 80, .18) 0 18px, transparent 19px),
+    
+        radial-gradient(circle at 72% 24%, rgba(255, 0, 80, .14) 0 16px, transparent 17px),
+        radial-gradient(circle at 78% 24%, rgba(255, 0, 80, .14) 0 16px, transparent 17px),
+    
+        radial-gradient(circle at 25% 70%, rgba(255, 0, 80, .12) 0 22px, transparent 23px),
+        radial-gradient(circle at 33% 70%, rgba(255, 0, 80, .12) 0 22px, transparent 23px),
+    
+        radial-gradient(circle at 70% 78%, rgba(255, 0, 80, .12) 0 22px, transparent 23px),
+        radial-gradient(circle at 78% 78%, rgba(255, 0, 80, .12) 0 22px, transparent 23px),
+    
+        radial-gradient(800px 320px at 20% 20%, rgba(255, 111, 177, .18), transparent 60%),
+        radial-gradient(700px 320px at 80% 55%, rgba(255, 204, 102, .14), transparent 60%);
+      filter: blur(0.2px);
+      opacity:.95;
+      pointer-events:none;
+      z-index:0;
+    }
+    
+    /* “love letter” box */
+    .love-card{
+      position:relative;
+      z-index:1;
+      margin-top: 8px;
+      padding: 16px 16px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: linear-gradient(180deg, rgba(255,111,177,.14), rgba(0,0,0,.14));
+      box-shadow:
+        0 16px 46px rgba(0,0,0,.30),
+        0 0 0 1px rgba(255, 80, 120, .20);
+    }
+    
+    .love-title{
+      margin: 0 0 10px;
+      font-size: clamp(22px, 3.2vw, 30px);
+    }
+    
+    .love-text{
+      margin: 0;
+      color: #ffffffde;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    
+    .love-text .heartline{
+      display:block;
+      margin-top: 10px;
+      color: rgba(255,255,255,.92);
+      font-weight: 600;
+    }
+
   </style>
 </head>
 <body>
@@ -360,6 +425,65 @@
             </div>
 
             <!-- PAGE 4 -->
+            <div class="slide romantic">
+              <h1 class="love-title">For you, always ❤️</h1>
+              <p class="tiny">✨❤️✨</p>
+            
+              <div class="love-card">
+                <p class="love-text">
+                  Sometimes I wonder if you truly understand how much you mean to me. You’re not just someone special… you’re someone who changed the way I see the world. Your kindness, your heart, your smile — they’ve quietly become a part of my everyday happiness.
+                  <br /><br />
+                  There are moments when I catch myself feeling grateful for you for no reason at all… just grateful that you exist. That I get to know you. That I get to celebrate you today.
+                  <br /><br />
+                  I hope this year gives you back even a fraction of the love, warmth, and comfort you bring into my life without even trying.
+                  You deserve a kind of happiness that feels safe, steady, and endless.
+                  <span class="heartline">And I hope you always remember… you are deeply cherished. 🤍</span>
+                </p>
+              </div>
+            </div>
+            
+            <!-- PAGE 5 -->
+            <div class="slide romantic">
+              <h1 class="love-title">Happy Birthday, my favorite soul ❤️</h1>
+              <p class="tiny">✨❤️✨</p>
+            
+              <div class="love-card">
+                <p class="love-text">
+                  Happy Birthday to the most precious soul I know.
+                  You have this quiet magic about you — the way you smile, the way you care, the way you simply exist — it makes everything around you feel warmer.
+                  <br /><br />
+                  I don’t think you even realize how much light you bring into people’s lives… especially mine.
+                  I hope today hugs you the way your presence hugs my heart.
+                  I hope you feel loved in ways that are gentle, deep, and undeniable.
+                  <br /><br />
+                  Thank you for being you. There’s no one else in this world I’d rather celebrate. 🤍✨
+                </p>
+              </div>
+            </div>
+            
+            <!-- PAGE 6 -->
+            <div class="slide romantic">
+              <h1 class="love-title">My heart’s truth ❤️</h1>
+              <p class="tiny">✨❤️✨</p>
+            
+              <div class="love-card">
+                <p class="love-text">
+                  Happy Birthday.
+                  I don’t think you truly understand what you mean to me. You walked into my life so gently, but somehow you became one of the most important parts of it.
+                  <br /><br />
+                  There are days when I don’t say it out loud, but I carry this silent gratitude in my heart — gratitude that you exist, that you smile the way you do, that you care the way you do.
+                  You have this rare kind of heart… the kind that makes people feel safe, seen, and valued. You’ve done that for me more times than you’ll ever know.
+                  <br /><br />
+                  If life ever feels heavy for you, I hope you remember that somewhere in this world, there is someone who thanks God for your existence. Someone who feels lucky just to know you.
+                  <br /><br />
+                  I hope this year holds you gently. I hope it protects your softness. And I hope you never forget how deeply you are cherished — not just today, but every single day.
+                  <span class="heartline">Happy Birthday to a soul I will always be grateful for. 🤍</span>
+                </p>
+              </div>
+            </div>
+
+
+            <!-- PAGE 7 -->
             <div class="slide">
               <h1>One last thing… 💞</h1>
               <p class="tiny">✨💛✨</p>
@@ -600,8 +724,12 @@
 
       if (idx === 0) nextText.textContent = "Curious already? go on swee 🔥";
       else if (idx === 1) nextText.textContent = "There’s more waiting for you 💫";
-      else if (idx === 2) nextText.textContent = "One last page… don’t rush 💞";
-      else nextText.textContent = "That’s it swee 😘";
+      else if (idx === 2) nextText.textContent = "Aww… keep going 💛";
+      else if (idx === 3) nextText.textContent = "One more heartfelt page ❤️";
+      else if (idx === 4) nextText.textContent = "Nice you are almost there...";
+      else if (idx === 5) nextText.textContent = "Last one… read slowly 💞";
+      else nextText.textContent = "That’s it swee 💞";
+
 
       // 🎉 Fire ONLY on Page 3 (idx = 2) — double boom
       if (idx === 2 && !window.__cannonFired) {
