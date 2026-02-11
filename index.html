@@ -698,6 +698,15 @@
     function go(n) {
       idx = clamp(n, 0, total - 1);
       render();
+      scrollToSliderTop();   // 👈 add this line
+    }
+
+    function scrollToSliderTop() {
+      const slider = document.querySelector(".slider");
+      if (!slider) return;
+    
+      const y = slider.getBoundingClientRect().top + window.pageYOffset - 10;
+      window.scrollTo({ top: y, behavior: "smooth" });
     }
 
     function render() {
